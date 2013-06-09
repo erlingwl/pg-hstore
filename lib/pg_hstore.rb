@@ -83,10 +83,16 @@ module PgHstore
   #
   # You got it, boss.
   def PgHstore.escape_nonnull_for_hstore(string)
+    return escape_array(string) if string.kind_of?(Array)
     interior = string.to_s.dup
     interior.gsub!(SLASH) {ESCAPED_SLASH}
     interior.gsub!(DOUBLE_QUOTE, ESCAPED_DOUBLE_QUOTE)
     DOUBLE_QUOTE + interior + DOUBLE_QUOTE
+  end
+
+  def PgHstore.escape_array(array)
+    escaped_values = array.map{|v| escape_nonnull_for_hstore(v)}
+    "{#{escaped_values.join(', ')}}"
   end
 
   # Escape a string as a string constant to be used in a SQL query

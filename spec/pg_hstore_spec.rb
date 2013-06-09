@@ -49,6 +49,11 @@ describe "hstores from hashes" do
      %q["line_noise"=>"perl -p -e 's/\\\\$\\\\{([^}]+)\\\\}/"],
      %q[E'"line_noise"=>"perl -p -e \'s/\\\\\\\\$\\\\\\\\{([^}]+)\\\\\\\\}/"']
     ],
+    ["should convert values as arrays into sql arrays",
+      {:some_key => ["array","values"]},
+      %q{"some_key"=>{"array", "values"}},
+      %q{E'"some_key"=>{"array", "values"}'}
+    ]
   ]
 
   DATA.each do |name, hash, encoded, string_constant|
